@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <h1 class="logo">ZENITH</h1>
+            <nav class="menu">
+                <ul>
+                    <li class="active"><a href="#" id="dashboardLink" data-i18n="dashboardLink">Dashboard</a></li>
+                    <li><a href="#" id="miConsumoLink" data-i18n="miConsumoLink">Mi Consumo</a></li>
+                    <li><a href="#" id="historialLink" data-i18n="historialLink">Historial Anual</a></li>
+                    <li><a href="#" id="facturasLink" data-i18n="facturasLink">Mis Facturas</a></li>
+                    <li><a href="#" id="alertasLink" data-i18n="alertasLink">Alertas y Notificaciones</a></li>
+                    <li><a href="#" id="configuracionLink" data-i18n="configuracionLink">Configuración</a></li>
+                    <li><a href="#" id="evaluacionLink" data-i18n="evaluacionLink">Evaluar Aplicación</a></li>
+                    <li><a href="#" id="ayudaLink" data-i18n="ayudaLink">Ayuda</a></li>
+                    <li><a href="{{ url_for('logout') }}" id="logoutLink" style="color: var(--danger-color);" data-i18n="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        
+            <div class="sidebar-footer">
+                <select id="language-select-sidebar">
+                    <option value="es" data-i18n="lang-es">Español</option>
+                    <option value="en" data-i18n="lang-en">Inglés</option>
+                    <option value="pt" data-i18n="lang-pt">Portugués</option>
+                </select>
+                <select id="theme-select-sidebar">
+                    <option value="dark" data-i18n="theme-dark">Oscuro</option>
+                    <option value="light" data-i18n="theme-light">Claro</option>
+                </select>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2 id="welcome-message"><span data-i18n="welcomeMsg">Bienvenido,</span> {{ usuario.nombre_usuario if usuario else 'Usuario' }}!</h2>
+                
+                <div class="user-profile" id="userProfileButton" title="Ver Perfil">
+                    <div id="header-avatar-container">
+                        <i class="fas fa-user-circle user-icon"></i>
+                    </div>
+                </div>
+            </header>
+
+            <section class="main-dashboard-content view active">
+                <div class="summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div class="card card-total-consumption">
+                        <h4 data-i18n="totalConsTitle">Costo Total Mes</h4>
+                        <p class="data-value" id="totalConsValue">Cargando...</p>
+                    </div>
+                    <div class="card card-savings">
+                        <h4 data-i18n="savingsTitle">Ahorro Estimado (vs Mes Pasado)</h4>
+                        <p class="data-value" id="savingsValue">Cargando...</p> 
+                    </div>
+                    <div class="card card-alerts">
+                        <h4 data-i18n="alertsTitle">Alertas Activas</h4>
+                        <p class="data-value" id="alertsValue">Cargando...</p>
+                    </div>
+                </div>
+
+                <div class="charts-container" style="margin-top: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                    <div class="card">
+                        <h3 data-i18n="annualChartTitle">Consumo Mensual por Servicio (Año Actual)</h3>
+                        <div class="chart-container" style="height: 350px;">
+                            <canvas id="monthlyTrendChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 data-i18n="alertsTitle">Alertas Activas</h3>
+                        <div class="recommendations" id="dashboard-alertas-list" style="height: 350px; overflow-y: auto;">
+                            <p>Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-mi-consumo view" id="sectionMiConsumo">
+                <h2 data-i18n="miConsumoTitle">Mi Consumo</h2>
+                <div class="card">
+                    <h3 data-i18n="newRegTitle">Nuevo Registro de Gasto</h3>
+                    <div class="input-form-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        
+                        <div class="input-group">
+                            <label for="servicioSelect" id="servicioLabel" data-i18n="servicioLabel">Servicio:</label>
+                            <select id="servicioSelect">
+                                {% for servicio in tipos_servicio %}
+                                    <option value="{{ servicio.nombre_servicio }}">{{ servicio.nombre_servicio }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="fechaInput" id="fechaLabel" data-i18n="fechaLabel">Fecha del Consumo:</label>
+                            <input type="date" id="fechaInput">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="consumoInput" id="consumoLabel" data-i18n="consumoLabel">Valor Consumo <span id="consumoUnit">(kWh)</span>:</label>
+                            <input type="number" step="0.01" id="consumoInput" placeholder="Ej: 150">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="costoInput" id="costoLabel" data-i18n="costoLabel">Costo total (COP) (Opcional):</label>
+                            <input type="number" step="0.01" id="costoInput" placeholder="Ej: 50000">
+                        </div>
+                        
+                        <button id="guardarConsumoBtn" class="main-btn" data-i18n="guardarBtn" style="grid-column: span 2;">Guardar Gasto</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section-historial view" id="sectionHistorial">
+                <h2 data-i18n="historialTitle">Historial Anual de Consumo</h2>
+                <div class="card">
+                    <p>Aquí se muestra tu resumen de consumo por año y por servicio, guardado en la tabla `Consumo_Anual_Historico`.</p>
+                    <div class="table-container" style="overflow-x: auto;">
+                        <table id="annualHistoryTable" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                            <thead>
+                                <tr style="background-color: var(--accent-color); color: var(--card-bg);">
+                                    <th style="padding: 10px; border: 1px solid var(--card-bg);">Año</th>
+                                    <th style="padding: 10px; border: 1px solid var(--card-bg);">Electricidad (kWh)</th>
+                                    <th style="padding: 10px; border: 1px solid var(--card-bg);">Agua (m³)</th>
+                                    <th style="padding: 10px; border: 1px solid var(--card-bg);">Gas (m³)</th>
+                                    <th style="padding: 10px; border: 1px solid var(--card-bg);">Internet (GB)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="annualHistoryBody">
+                                <tr><td colspan="5" style="text-align: center; padding: 10px;">Cargando historial...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-facturas view" id="sectionFacturas">
+                <h2 data-i18n="facturasTitle">Mis Facturas</h2>
+                <div class="card">
+                    <h3 data-i18n="newFacturaTitle">Subir Nueva Factura</h3>
+                    <form id="facturaUploadForm" class="input-form-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-group">
+                            <label for="facturaPeriodoInput">Periodo (Mes y Año):</label>
+                            <input type="month" id="facturaPeriodoInput" required> </div>
+                        <div class="input-group">
+                            <label for="facturaMontoInput">Monto Total (COP):</label>
+                            <input type="number" step="0.01" id="facturaMontoInput" placeholder="Ej: 120000" required>
+                        </div>
+                        <div class="input-group" style="grid-column: span 2;">
+                            <label for="facturaFileInput">Archivo (PDF, PNG, JPG):</label>
+                            <input type="file" id="facturaFileInput" accept=".pdf,.png,.jpg,.jpeg" required>
+                        </div>
+                        <button id="guardarFacturaBtn" class="main-btn" style="grid-column: span 2;">Subir Factura</button>
+                    </form>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h3>Historial de Facturas</h3>
+                    <div class="table-container">
+                        <table id="facturasHistoryTable" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                            <thead>
+                                <tr>
+                                    <th>Periodo</th>
+                                    <th>Monto Total (COP)</th>
+                                    <th>Archivo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="facturasHistoryBody">
+                                <tr><td colspan="3" style="text-align: center; padding: 10px;">Cargando facturas...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section-alertas view" id="sectionAlertas">
+                <h2 data-i18n="alertasSectionTitle">Alertas y Notificaciones</h2>
+                <div class="card">
+                    <h3 data-i18n="recoTitle">Mis Alertas y Recomendaciones</h3>
+                    <div class="recommendations" id="alertas-list">
+                        <p>Cargando alertas...</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-configuracion view" id="sectionConfiguracion">
+                <h2 data-i18n="configTitle">Configuración</h2>
+                <div class="card">
+                    <h3>Actualizar Datos de Perfil</h3>
+                    <p>Aquí puedes cambiar tu nombre de usuario y correo electrónico.</p>
+                    <div id="updateProfileForm" class="input-form-container" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-group">
+                            <label for="profileUsername">Nombre de Usuario:</label>
+                            <input type="text" id="profileUsername" value="{{ usuario.nombre_usuario if usuario else 'Usuario' }}">
+                        </div>
+                        <div class="input-group">
+                            <label for="profileEmail">Correo Electrónico:</label>
+                            <input type="email" id="profileEmail" value="{{ usuario.email if usuario else '...cargando' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <h3>Actualizar Contraseña</h3>
+                    <p>Deja los campos en blanco si no deseas cambiar tu contraseña.</p>
+                    <div id="updatePasswordForm" class="input-form-container" style="grid-template-columns: 1fr; gap: 15px;">
+                        <div class="input-group" style="grid-column: span 1;">
+                            <label for="profileCurrentPassword">Contraseña Actual:</label>
+                            <input type="password" id="profileCurrentPassword" placeholder="Ingresa tu contraseña actual para confirmar">
+                        </div>
+                        <div class="input-group" style="grid-column: span 1;">
+                            <label for="profileNewPassword">Nueva Contraseña:</label>
+                            <input type="password" id="profileNewPassword" placeholder="Deja en blanco para no cambiar">
+                        </div>
+                        <button id="updateProfileButton" class="main-btn" style="grid-column: span 1;">Guardar Cambios</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-evaluacion view" id="sectionEvaluacion">
+                <h2 data-i18n="evaluacionTitle">Evaluar Aplicación</h2>
+                <div class="card">
+                    <h3 data-i18n="evalFormTitle">¿Cómo ha sido tu experiencia? (CUD 010)</h3>
+                    <form id="evaluacionForm" class="input-form-container" style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                        <div class="input-group">
+                            <label for="evaluacionCalificacion">Calificación (1=Malo, 5=Excelente):</label>
+                            <select id="evaluacionCalificacion" required>
+                                <option value="" disabled selected>Selecciona una calificación</option>
+                                <option value="5">5 - Excelente</option>
+                                <option value="4">4 - Bueno</option>
+                                <option value="3">3 - Regular</option>
+                                <option value="2">2 - Malo</option>
+                                <option value="1">1 - Muy Malo</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="evaluacionComentario">Comentario (Opcional):</label>
+                            <textarea id="evaluacionComentario" rows="4" placeholder="Cuéntanos qué podemos mejorar..."></textarea>
+                        </div>
+                        <button id="guardarEvaluacionBtn" class="main-btn">Enviar Evaluación</button>
+                    </form>
+                </div>
+            </section>
+
+            <section class="section-ayuda view" id="sectionAyuda">
+                <h2 data-i18n="helpTitle">Ayuda</h2>
+                <div class="card">
+                    <h3>Preguntas Frecuentes (FAQ)</h3>
+                    
+                    <h4>¿Cómo registro un consumo?</h4>
+                    <p>Ve a la sección "Mi Consumo", selecciona el servicio, la fecha y el valor (consumo en kWh, m³, etc.). El costo es opcional pero recomendado para habilitar el seguimiento de ahorros.</p>
+                    
+                    <h4>¿Por qué mis tarjetas de "Costo" y "Ahorro" están en $0?</h4>
+                    <p>Estas tarjetas requieren que ingreses el "Costo total (COP)" al registrar un consumo. El "Ahorro" solo se calculará si tienes costos registrados en el mes actual y en el mes anterior para poder compararlos.</p>
+                    
+                    <h4>¿Cómo se generan las "Alertas"?</h4>
+                    <p>Una alerta se genera automáticamente cuando registras un consumo que es significativamente más alto (más de 20%) que tu promedio histórico para ese mismo servicio.</p>
+    
+                    <h4>¿Cómo cambio mi foto de perfil?</h4>
+                    <p>Haz clic en el ícono de usuario en la esquina superior derecha para abrir tu perfil. Desde allí podrás seleccionar y guardar una nueva foto, que se almacenará localmente en tu navegador.</p>
+                </div>
+            </section>
+            
+            <div id="profileModal" class="modal-overlay" style="display: none;">
+                <div class="modal-content card">
+                    <span class="modal-close-btn" id="closeProfileModal">&times;</span>
+                    <h3>Mi Perfil</h3>
+                    <h4 id="modal-welcome-message">Hola, {{ usuario.nombre_usuario if usuario else 'Usuario' }}!</h4>
+                    <p>Aquí puedes actualizar tu foto de perfil.</p>
+                    
+                    <div id="avatar-preview-container" style="text-align: center; margin: 15px 0;">
+                        </div>
+
+                    <div class="input-group">
+                        <label for="avatarUpload">Seleccionar nueva foto (PNG, JPG):</label>
+                        <input type="file" id="avatarUpload" accept="image/png, image/jpeg" style="width: 100%;">
+                    </div>
+                    <button id="saveAvatarButton" class="main-btn">Guardar Foto</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var CURRENT_USER_ID = {{ usuario.id_usuario | default('null') }};
+    </script>
+    <script src="{{ url_for('static', filename='chart.js') }}"></script>
+</body>
+</html>

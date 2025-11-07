@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Zenith</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <h1 class="logo">ZENITH (Admin)</h1>
+            <nav class="menu">
+                <ul>
+                    <li class="active"><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-users"></i> Gestión de Usuarios</a></li>
+                    <li><a href="{{ url_for('logout') }}" style="color: var(--danger-color);"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>Panel de Administración</h2>
+            </header>
+
+            <section class="view active">
+                <div class="card">
+                    <h3>Todos los Usuarios del Sistema</h3>
+                    <p>Aquí puedes ver y gestionar los datos de todos los usuarios registrados.</p>
+                    
+                    <div class="table-container">
+                        <table id="adminUserTable">
+                            <thead>
+                                <tr>
+                                    <th>ID Usuario</th>
+                                    <th>Nombre de Usuario</th>
+                                    <th>Email</th>
+                                    <th>Fecha de Registro</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if all_users %}
+                                    {% for user in all_users %}
+                                    <tr>
+                                        <td>{{ user.id_usuario }}</td>
+                                        <td>{{ user.nombre_usuario }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.fecha_registro.strftime('%Y-%m-%d') }}</td>
+                                        <td>
+                                            <a href="{{ url_for('admin_view_user', user_id=user.id_usuario) }}" class="admin-action-btn view">
+                                                <i class="fas fa-eye"></i> Ver Detalles
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="5" style="text-align: center;">No hay usuarios registrados.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

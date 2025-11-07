@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a ZENITH - Consumo Inteligente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing_styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">ZENITH</h1>
+            <nav class="nav-main">
+                <a href="{{ url_for('inicio') }}" class="btn btn-secondary">Iniciar Sesión</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Toma el control de tu consumo.</h1>
+                <p>Transforma tus hábitos, ahorra dinero y cuida el planeta. ZENITH es la herramienta definitiva para entender y optimizar tu uso de servicios básicos.</p>
+                <a href="{{ url_for('inicio') }}" class="btn btn-primary">Comienza a Ahorrar Ahora</a>
+            </div>
+        </section>
+
+        <section class="section-problem container">
+            <h2>¿Por qué ZENITH es necesario?</h2>
+            <p class="subtitle">El desconocimiento de tu consumo impacta tus finanzas y el medio ambiente.</p>
+            <div class="problem-cards">
+                <div class="card">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h3>Facturas Elevadas</h3>
+                    <p>Las facturas tradicionales no te dicen dónde estás gastando de más, solo cuánto debes pagar.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-faucet-drip"></i>
+                    <h3>Derroche Oculto</h3>
+                    <p>Fugas de agua, luces encendidas o "consumo fantasma" aumentan tu huella ambiental sin que lo sepas.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-chart-line-down"></i>
+                    <h3>Falta de Control</h3>
+                    <p>Sin datos claros, es imposible crear un plan de ahorro efectivo o medir tu progreso.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-solution">
+            <div class="container">
+                <h2>La Solución: Simple y Poderosa</h2>
+                <div class="solution-steps">
+                    <div class="step">
+                        <img src="https://images.unsplash.com/photo-1556740738-c6a63e2844de" alt="Registra tu consumo">
+                        <h3>1. Registra</h3>
+                        <p>Ingresa fácilmente los datos de consumo de tus servicios de agua, electricidad y gas cada mes.</p>
+                    </div>
+                    <div class="step">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" alt="Visualiza tus gráficas">
+                        <h3>2. Visualiza</h3>
+                        <p>Entiende tus patrones de gasto al instante con gráficas claras e intuitivas. Detecta picos y anomalías.</p>
+                    </div>
+                    <div class="step">
+                        <img src="https://images.unsplash.com/photo-1523436030-5318118f75f8" alt="Ahorra dinero y cuida el planeta">
+                        <h3>3. Ahorra</h3>
+                        <p>Recibe alertas y recomendaciones personalizadas para reducir tu consumo y ver crecer tus ahorros.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-cta container">
+            <h2>Unirte a ZENITH es un compromiso.</h2>
+            <p>Más que una app, te unes a una comunidad que fomenta el uso consciente de los recursos. Cada kilovatio y cada gota de agua que ahorramos juntos, es una victoria para el planeta.</p>
+            <a href="{{ url_for('inicio') }}" class="btn btn-primary">Únete y cuida el medio ambiente</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <h1 class="logo">ZENITH</h1>
+            <p>&copy; 2025 ZENITH. Todos los derechos reservados.</p>
+            <p>Un proyecto de: Miguel Espinel, Akira Kawakami y Juan Carlos Rojas.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de {{ user.nombre_usuario }} - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <h1 class="logo">ZENITH (Admin)</h1>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-arrow-left"></i> Volver a Usuarios</a></li>
+                    <li><a href="{{ url_for('logout') }}" style="color: var(--danger-color);"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>Viendo a: {{ user.nombre_usuario }} (ID: {{ user.id_usuario }})</h2>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <section class="view active">
+                
+                <div class="card">
+                    <h3><i class="fas fa-plus-circle"></i> Añadir Consumo para este Usuario</h3>
+                    <form action="{{ url_for('admin_add_consumo', user_id=user.id_usuario) }}" method="POST" class="input-form-container">
+                        <div class="input-group">
+                            <label for="servicio_id_consumo">Servicio:</label>
+                            <select id="servicio_id_consumo" name="servicio_id" required>
+                                {% for s in servicios %}
+                                <option value="{{ s.id_tipo_servicio }}">{{ s.nombre_servicio }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="fecha">Fecha:</label>
+                            <input type="date" id="fecha" name="fecha" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="consumo">Consumo (Uds.):</label>
+                            <input type="number" step="0.01" id="consumo" name="consumo" placeholder="Ej: 150.5" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="costo">Costo (COP) (Opcional):</label>
+                            <input type="number" step="0.01" id="costo" name="costo" placeholder="Ej: 80000">
+                        </div>
+                        <button type="submit" class="main-btn" style="grid-column: span 2;">Añadir Registro</button>
+                    </form>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <h3><i class="fas fa-bell-plus"></i> Añadir Alerta Manual</h3>
+                    <form action="{{ url_for('admin_add_alerta', user_id=user.id_usuario) }}" method="POST" class="input-form-container" style="grid-template-columns: 1fr;">
+                        <div class="input-group" style="grid-column: span 1;">
+                            <label for="servicio_id_alerta">Servicio (Opcional):</label>
+                            <select id="servicio_id_alerta" name="servicio_id">
+                                <option value="">General</option>
+                                {% for s in servicios %}
+                                <option value="{{ s.id_tipo_servicio }}">{{ s.nombre_servicio }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="input-group" style="grid-column: span 1;">
+                            <label for="texto_alerta">Texto de la Alerta:</label>
+                            <textarea id="texto_alerta" name="texto_alerta" rows="3" required placeholder="Escribe el mensaje de la alerta..."></textarea>
+                        </div>
+                        <button type="submit" class="main-btn" style="grid-column: span 1;">Crear Alerta</button>
+                    </form>
+                </div>
+
+
+                <div class="card" style="margin-top: 20px;">
+                    <h3><i class="fas fa-chart-line"></i> Registros de Consumo</h3>
+                    <div class="table-container">
+                        <table id="adminConsumoTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Servicio</th>
+                                    <th>Fecha</th>
+                                    <th>Consumo</th>
+                                    <th>Costo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if consumos %}
+                                    {% for c in consumos %}
+                                    <tr>
+                                        <td>{{ c.id_consumo }}</td>
+                                        <td>{{ c.tipo_servicio.nombre_servicio }}</td>
+                                        <td>{{ c.fecha_consumo.strftime('%Y-%m-%d') }}</td>
+                                        <td>{{ c.valor_consumo }}</td>
+                                        <td>{{ c.costo_total if c.costo_total else 'N/A' }}</td>
+                                        <td class="action-cell">
+                                            <a href="{{ url_for('admin_edit_consumo', consumo_id=c.id_consumo) }}" class="admin-action-btn edit">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <form action="{{ url_for('admin_delete_consumo', consumo_id=c.id_consumo) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres borrar este consumo?');">
+                                                <button type="submit" class="admin-action-btn delete">
+                                                    <i class="fas fa-trash"></i> Borrar
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="6" style="text-align: center;">Este usuario no tiene consumos.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <h3><i class="fas fa-bell"></i> Alertas Generadas</h3>
+                    <div class="table-container">
+                        <table id="adminAlertaTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Mensaje de Alerta</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if alertas %}
+                                    {% for a in alertas %}
+                                    <tr>
+                                        <td>{{ a.id_alerta }}</td>
+                                        <td>{{ a.fecha_creacion.strftime('%Y-%m-%d') }}</td>
+                                        <td>{{ a.texto_alerta }}</td>
+                                        <td class="action-cell">
+                                             <a href="{{ url_for('admin_edit_alerta', alerta_id=a.id_alerta) }}" class="admin-action-btn edit">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <form action="{{ url_for('admin_delete_alerta', alerta_id=a.id_alerta) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres borrar esta alerta?');">
+                                                <button type="submit" class="admin-action-btn delete">
+                                                    <i class="fas fa-trash"></i> Borrar
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="4" style="text-align: center;">Este usuario no tiene alertas.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <h3><i class="fas fa-file-invoice"></i> Facturas Subidas</h3>
+                    <div class="table-container">
+                        <table id="adminFacturaTable">
+                            <thead>
+                                <tr>
+                                    <th>Periodo</th>
+                                    <th>Monto</th>
+                                    <th>Archivo</th>
+                                    <th>Acción</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if facturas %}
+                                    {% for f in facturas %}
+                                    <tr>
+                                        <td>{{ f.periodo }}</td>
+                                        <td>{{ f.monto_total }}</td>
+                                        <td>
+                                            {% if f.archivo_uri %}
+                                                <a href="{{ url_for('download_factura', filename=f.archivo_uri) }}" target="_blank">Ver Archivo</a>
+                                            {% else %}
+                                                No adjunto
+                                            {% endif %}
+                                        </td>
+                                        <td class="action-cell">
+                                            <a href="{{ url_for('admin_edit_factura', factura_id=f.id_factura) }}" class="admin-action-btn edit">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <form action="{{ url_for('admin_delete_factura', factura_id=f.id_factura) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres borrar esta factura y su archivo? Esta acción no se puede deshacer.');">
+                                                <button type="submit" class="admin-action-btn delete">
+                                                    <i class="fas fa-trash"></i> Borrar
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="4" style="text-align: center;">Este usuario no tiene facturas.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+</body>
+</html>

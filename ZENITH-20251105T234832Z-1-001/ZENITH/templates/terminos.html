@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones - ZENITH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='zenith_styles.css') }}"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: #f4f4f4;
+            display: block;
+        }
+        .terminos-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            color: #333;
+            text-align: left;
+        }
+        .terminos-container h1, .terminos-container h2 {
+            color: #1e8449;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 10px;
+        }
+        .terminos-container p, .terminos-container li {
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+        .terminos-container .btn-volver {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1e8449;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .terminos-container .btn-volver:hover {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminos-container">
+        <h1>Términos y Condiciones de Uso de ZENITH</h1>
+        <p>Fecha de última actualización: 4 de noviembre de 2025</p>
+
+        <p>Bienvenido a ZENITH. Al registrarse y utilizar nuestra aplicación, usted acepta los siguientes términos y condiciones:</p>
+
+        <h2>1. Aceptación de los Términos</h2>
+        <p>Al crear una cuenta, usted confirma que ha leído, entendido y aceptado estar sujeto a estos Términos y Condiciones y a nuestra Política de Privacidad. Si no está de acuerdo con alguno de estos términos, no debe registrarse ni utilizar la aplicación.</p>
+
+        <h2>2. Descripción del Servicio</h2>
+        <p>ZENITH es una aplicación web que permite a los usuarios registrar, visualizar y analizar su consumo de servicios básicos (agua, electricidad, gas, etc.) con el fin de fomentar el ahorro y la sostenibilidad. Las funciones incluyen el ingreso manual de datos, la visualización de gráficos y la recepción de alertas.</p>
+
+        <h2>3. Responsabilidades del Usuario</h2>
+        <ul>
+            <li>Usted es responsable de mantener la confidencialidad de su contraseña.</li>
+            <li>Usted es el único responsable de la veracidad y exactitud de los datos de consumo que ingresa en la plataforma.</li>
+            <li>Usted acepta no utilizar la plataforma para ningún fin ilegal o no autorizado.</li>
+        </ul>
+
+        <h1 id="privacidad">Política de Privacidad y Tratamiento de Datos</h1>
+        <p>ZENITH se compromete a proteger su privacidad y sus datos personales.</p>
+
+        <h2>1. Datos Recopilados</h2>
+        <p>Recopilamos los siguientes datos personales para crear y mantener su cuenta:</p>
+        <ul>
+            <li>Nombre de usuario</li>
+            <li>Correo electrónico</li>
+        </ul>
+        <p>Además, recopilamos los datos de consumo que usted voluntariamente registra en la aplicación (valores de consumo, costos y fechas).</p>
+
+        <h2>2. Finalidad del Tratamiento de Datos</h2>
+        <p>Sus datos personales y de consumo se utilizan exclusivamente para:</p>
+        <ul>
+            <li>Prestar el servicio principal de la aplicación: almacenar su historial, generar gráficas y calcular ahorros.</li>
+            <li>Generar alertas de consumo excesivo.</li>
+            <li>Analizar patrones de consumo de forma anónima para mejorar el servicio.</li>
+        </ul>
+
+        <h2>3. Cumplimiento Legal (Habeas Data)</h2>
+        <p>En cumplimiento de la legislación colombiana, ZENITH se acoge a la <strong>Ley 1266 de 2008</strong> y, principalmente, a la <strong>Ley 1581 de 2012</strong> y sus decretos reglamentarios, que protegen el derecho fundamental al Habeas Data.</p>
+        <p>Como titular de la información, usted tiene derecho a:</p>
+        <ul>
+            <li><strong>Conocer:</strong> Saber qué información personal tenemos almacenada sobre usted.</li>
+            <li><strong>Actualizar:</strong> Corregir su información personal si es inexacta o está desactualizada.</li>
+            <li><strong>Rectificar:</strong> Modificar datos que sean erróneos o incompletos.</li>
+            <li><strong>Suprimir (Eliminar):</strong> Solicitar la eliminación de sus datos personales de nuestras bases de datos en cualquier momento.</li>
+        </ul>
+        <p>ZENITH no compartirá, venderá ni alquilará su información personal a terceros sin su consentimiento explícito, salvo que sea requerido por una orden judicial.</p>
+
+        <h2>4. Seguridad de los Datos</h2>
+        <p>Implementamos medidas de seguridad técnicas y administrativas para proteger sus datos contra el acceso no autorizado, la alteración, la divulgación o la destrucción.</p>
+
+        <a href="{{ url_for('inicio') }}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver al Registro</a>
+    </div>
+
+</body>
+</html>

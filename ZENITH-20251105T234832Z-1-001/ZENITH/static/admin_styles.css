@@ -1,0 +1,113 @@
+/* Estilos específicos para el panel de Admin */
+
+/* Usar el tema oscuro del dashboard principal por defecto */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Tablas de Admin */
+#adminUserTable,
+#adminConsumoTable,
+#adminAlertaTable,
+#adminFacturaTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#adminUserTable th, #adminUserTable td,
+#adminConsumoTable th, #adminConsumoTable td,
+#adminAlertaTable th, #adminAlertaTable td,
+#adminFacturaTable th, #adminFacturaTable td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid var(--bg-color);
+}
+
+#adminUserTable thead,
+#adminConsumoTable thead,
+#adminAlertaTable thead,
+#adminFacturaTable thead {
+    background-color: var(--accent-color);
+    color: var(--card-bg);
+}
+
+#adminUserTable tbody tr:nth-child(even),
+#adminConsumoTable tbody tr:nth-child(even),
+#adminAlertaTable tbody tr:nth-child(even),
+#adminFacturaTable tbody tr:nth-child(even) {
+    background-color: var(--bg-color);
+}
+
+/* Botones de Acción de Admin */
+.admin-action-btn {
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    border: none;
+    display: inline-block; /* Cambiado para que estén en línea */
+    transition: all 0.2s ease;
+    margin-right: 5px; /* Espacio entre botones */
+    vertical-align: middle; /* Alinear verticalmente */
+}
+
+/* Estilo específico para los botones dentro de un form */
+.action-cell form {
+    display: inline-block; /* Asegura que el form no ocupe toda la línea */
+    margin: 0;
+}
+.action-cell form button {
+     margin-right: 0; /* Quitar margen extra si es el último */
+}
+/* Estilo para la celda de acciones */
+.action-cell {
+    white-space: nowrap; /* Evita que los botones se envuelvan */
+}
+
+
+.admin-action-btn.view {
+    background-color: var(--link-color);
+    color: #fff;
+}
+.admin-action-btn.view:hover {
+    filter: brightness(1.2);
+}
+
+/* --- NUEVO ESTILO PARA EL BOTÓN EDITAR --- */
+.admin-action-btn.edit {
+    background-color: var(--primary-color); /* Usar el color primario (verde) */
+    color: var(--card-bg); /* Texto oscuro para contraste */
+}
+.admin-action-btn.edit:hover {
+    filter: brightness(1.2);
+}
+/* --- FIN NUEVO ESTILO --- */
+
+.admin-action-btn.delete {
+    background-color: var(--danger-color);
+    color: #fff;
+}
+.admin-action-btn.delete:hover {
+    filter: brightness(1.2);
+}
+
+/* Mensajes Flash (para éxito/error) */
+.flash-message {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+}
+.flash-message.success {
+    background-color: var(--primary-color);
+    color: var(--card-bg);
+}
+.flash-message.danger {
+    background-color: var(--danger-color);
+    color: #fff;
+}

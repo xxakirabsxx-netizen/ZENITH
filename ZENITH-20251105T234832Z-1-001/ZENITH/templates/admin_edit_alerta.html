@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Alerta - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <h1 class="logo">ZENITH (Admin)</h1>
+            <nav class="menu">
+                 <ul>
+                    <li><a href="{{ url_for('admin_view_user', user_id=alerta.fk_id_usuario) }}"><i class="fas fa-arrow-left"></i> Volver a Detalles</a></li>
+                    <li><a href="{{ url_for('logout') }}" style="color: var(--danger-color);"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>Editar Alerta (ID: {{ alerta.id_alerta }})</h2>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="card">
+                 <form method="POST" class="input-form-container" style="grid-template-columns: 1fr;"> <div class="input-group">
+                        <label for="texto_alerta">Texto de la Alerta:</label>
+                        <textarea id="texto_alerta" name="texto_alerta" rows="4" required>{{ alerta.texto_alerta }}</textarea>
+                    </div>
+                     <button type="submit" class="main-btn" style="grid-column: span 1;">Guardar Cambios</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
